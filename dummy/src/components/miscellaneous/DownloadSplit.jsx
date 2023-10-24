@@ -1,6 +1,6 @@
 import { Box, Button, Heading } from "@chakra-ui/react";
 import React from "react";
-
+import { DownloadIcon } from "@chakra-ui/icons";
 const DownloadSplit = ({ handleDownloadPdf }) => {
   return (
     <Box

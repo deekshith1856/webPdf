@@ -1,19 +1,7 @@
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import axios from "axios";
-import {
-  Button,
-  Input,
-  Box,
-  Center,
-  Flex,
-  VStack,
-  Container,
-  Text,
-  FormControl,
-  Heading,
-  Spacer,
-} from "@chakra-ui/react";
+import { Box, Center, Flex, VStack } from "@chakra-ui/react";
 import { CheckCircleIcon, DownloadIcon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDraw/SideDrawer";
 import LoadingSpinner from "./Spinner/LoadingSpinner";
@@ -28,39 +16,47 @@ const PdfFile = () => {
   const [pdfUrl, setPdfUrl] = useState("");
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+  // Function to handle successful loading of PDF
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
 
+  // Function to handle the form submission for PDF splitting
   const handleSubmit = async () => {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", selectedFile);
     setSelectedFile();
+
     // Append an array of values with the same key
-    console.log("pages", pages);
     pages.forEach((value) => {
       formData.append("pages", value);
     });
     setPages([]);
     try {
+      // Send a POST request to split the PDF
       const { data } = await axios.post(
         "http://localhost:5000/api/upload/split",
         formData
       );
-      console.log("data", data);
+
+      // Process the split PDF data
       const byteValues = Object.values(data);
       const binaryData = new Uint8Array(byteValues);
+      // Create a Blob object with the binary data, specifying the MIME type
       const blob = new Blob([binaryData], { type: "application/pdf" });
+      // Create a URL for the Blob to make it accessible for download or rendering
       const url = URL.createObjectURL(blob);
       setPdfUrl(url);
-      // Create an anchor element to trigger the download
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
+  // Function to handle the download of the split PDF
   const handleDownloadPdf = () => {
     console.log("download pdf");
     const a = document.createElement("a");
@@ -73,9 +69,12 @@ const PdfFile = () => {
     window.URL.revokeObjectURL(pdfUrl);
     setPdfUrl("");
   };
+  // Function to handle the selection of PDF file
   const handleChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
+
+  // Function to handle the selection of specific pages
   const handleSelectPage = (val) => {
     if (findPage(val)) {
       const updateValue = pages.filter((data) => data !== val);
@@ -84,6 +83,8 @@ const PdfFile = () => {
       setPages([...pages, val].sort((a, b) => a - b));
     }
   };
+
+  // Function to check if a page is already selected
   const findPage = (val) => {
     return pages.includes(val);
   };
