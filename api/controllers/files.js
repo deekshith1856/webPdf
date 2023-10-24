@@ -11,7 +11,7 @@ const splitPdf = async (req, res, next) => {
         const uploadedFileBuffer = req.file.buffer;
 
         const pages = req.body.pages;
-        if (uploadedFile) {
+        if (uploadedFileBuffer) {
             //file saved successfully
 
             //create new pdf document
