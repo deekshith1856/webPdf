@@ -76,7 +76,7 @@ const MyUploads = () => {
 
   return (
     <LayoutContainer>
-      <Flex direction="row" justify={"space-between"}>
+      <Flex direction="row" justify={"space-between"} mt={20}>
         {selectedFiles.length == 0 ? (
           <Container>
             <Box

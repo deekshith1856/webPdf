@@ -12,7 +12,7 @@ const split = multer({
         destination: (req, file, cb) => {
             // Specify the directory where you want to save the files ('./upload' directory)
 
-            cb(null, '../server/upload');
+            cb(null, '../api/upload');
         },
         filename: (req, file, cb) => {
             // Define the filename for the uploaded file (e.g., use the original name)

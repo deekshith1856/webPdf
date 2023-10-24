@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function PageNotFound() {
   return (
     <LayoutContainer>
-      <Container maxW={"3xl"}>
+      <Container maxW={"3xl"} mt={20}>
         {" "}
         <Stack
           as={Box}

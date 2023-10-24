@@ -25,7 +25,11 @@ export default function Header() {
       <Box
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
-        position={"sticky"}
+        zIndex={100}
+        top={0}
+        right={0}
+        left={0}
+        position={"fixed"}
       >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Box mx={{ base: "2", md: "5" }} fontWeight={"bold"}>

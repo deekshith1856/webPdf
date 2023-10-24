@@ -64,7 +64,7 @@ const UploadsPage = () => {
         <LoadingSpinner />
       ) : (
         <>
-          <Center>
+          <Center mt={20}>
             <TableContainer w={{ base: "100%", md: "5xl" }}>
               <Table variant="striped" colorScheme="teal">
                 <TableCaption>My files</TableCaption>

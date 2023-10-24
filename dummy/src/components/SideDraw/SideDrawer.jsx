@@ -45,56 +45,66 @@ export default function SimpleSidebar({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   return (
-    <Box minH="100vh">
-      <Button
-        ref={btnRef}
-        onClick={onOpen}
-        zIndex={100}
-        mx={5}
-        my={5}
-        display={{ md: "none", base: "inline-block" }}
-      >
-        <BsFilterSquareFill />
-      </Button>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-        setPages={setPages}
-        pages={pages}
-        numPages={numPages}
-        handleSubmit={handleSubmit}
-      />
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <SidebarContent
-            onClose={onClose}
-            setPages={setPages}
-            pages={pages}
-            numPages={numPages}
-            handleSubmit={handleSubmit}
-          />
-        </DrawerContent>
-      </Drawer>
-
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        <Center mt={5} width={{ base: "30%" }} position={"fixed"}>
-          <Button
-            width={{ base: "30%" }}
-            colorScheme="red"
-            onClick={handleSubmit}
-          >
-            <Text color="white"> Split PDF </Text>
-          </Button>
-        </Center>
+    <>
+      <Box minH="100vh">
+        <Button
+          ref={btnRef}
+          onClick={onOpen}
+          zIndex={100}
+          pos={"fixed"}
+          top={20}
+          right={2}
+          mx={5}
+          my={5}
+          display={{ md: "none", base: "inline-block" }}
+        >
+          <BsFilterSquareFill />
+        </Button>
+        <SidebarContent
+          onClose={() => onClose}
+          display={{ base: "none", md: "block" }}
+          setPages={setPages}
+          pages={pages}
+          numPages={numPages}
+          handleSubmit={handleSubmit}
+        />
+        <Drawer
+          isOpen={isOpen}
+          placement="right"
+          onClose={onClose}
+          returnFocusOnClose={false}
+          onOverlayClick={onClose}
+          size="full"
+        >
+          <DrawerContent>
+            <SidebarContent
+              onClose={onClose}
+              setPages={setPages}
+              pages={pages}
+              numPages={numPages}
+              handleSubmit={handleSubmit}
+            />
+          </DrawerContent>
+        </Drawer>
       </Box>
-    </Box>
+
+      <Center
+        mt={5}
+        bottom={10}
+        right={5}
+        width={{ base: "30%" }}
+        position={"fixed"}
+        display={{ base: "block", md: "none" }}
+      >
+        <Button
+          width={{ base: "100%" }}
+          colorScheme="red"
+          onClick={handleSubmit}
+        >
+          <Text color="white"> Split PDF </Text>
+        </Button>
+      </Center>
+    </>
   );
 }
 
@@ -111,10 +121,12 @@ const SidebarContent = ({
       bg={"white"}
       borderLeft="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: 80 }}
+      w={{ base: "full", md: "25%" }}
       pos="fixed"
-      h="full"
       px={5}
+      mt={16}
+      right={7}
+      h={"full"}
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">

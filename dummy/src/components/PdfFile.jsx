@@ -94,7 +94,7 @@ const PdfFile = () => {
           {!pdfUrl ? (
             <Flex direction="row" justify={"space-between"}>
               {!selectedFile ? (
-                <Container>
+                <Container mt={20}>
                   <Box
                     display="flex"
                     width={"100%"}
@@ -137,68 +137,74 @@ const PdfFile = () => {
                 </Container>
               ) : (
                 <>
-                  <Document
-                    file={selectedFile}
-                    onLoadSuccess={onDocumentLoadSuccess}
+                  <Flex
+                    height={"100%"}
+                    width={{ base: "100%", md: "75%" }}
+                    py={20}
+                    px={10}
                   >
-                    <Flex
-                      dir="row"
-                      wrap={"wrap"}
-                      height={"100vh"}
-                      overflowY={"scroll"}
-                      gap={3}
-                      mx={4}
-                      my={4}
+                    <Document
+                      file={selectedFile}
+                      onLoadSuccess={onDocumentLoadSuccess}
                     >
-                      {numPages > 0 &&
-                        Array.from({ length: numPages }, (_, index) => {
-                          const pageProps = {
-                            pageNumber: index + 1,
-                            scale: 0.45,
-                            renderAnnotationLayer: false,
-                          };
-                          return (
-                            <Box
-                              key={index}
-                              border={
-                                findPage(pageProps.pageNumber)
-                                  ? "2px solid blue"
-                                  : ""
-                              }
-                            >
-                              <VStack
-                                border={"4px solid #FFDFDF"}
-                                onClick={() =>
-                                  handleSelectPage(pageProps.pageNumber)
+                      <Flex
+                        dir="row"
+                        wrap={"wrap"}
+                        height={"100%"}
+                        overflowY={"scroll"}
+                        width={"100%"}
+                        gap={3}
+                      >
+                        {numPages > 0 &&
+                          Array.from({ length: numPages }, (_, index) => {
+                            const pageProps = {
+                              pageNumber: index + 1,
+                              scale: 0.45,
+                              renderAnnotationLayer: false,
+                            };
+                            return (
+                              <Box
+                                key={index}
+                                border={
+                                  findPage(pageProps.pageNumber)
+                                    ? "2px solid blue"
+                                    : ""
                                 }
-                                px={1}
-                                py={1.5}
-                                mx={1}
-                                my={1.5}
                               >
-                                <style>
-                                  {`
+                                <VStack
+                                  border={"4px solid #FFDFDF"}
+                                  onClick={() =>
+                                    handleSelectPage(pageProps.pageNumber)
+                                  }
+                                  px={1}
+                                  py={1.5}
+                                  mx={1}
+                                  my={1.5}
+                                >
+                                  <style>
+                                    {`
                       .react-pdf__Page__textContent {
                         display: none;
                       }
                     `}
-                                </style>
-                                {findPage(pageProps.pageNumber) && (
-                                  <CheckCircleIcon
-                                    top={2}
-                                    left={2}
-                                    boxSize={6}
-                                    color="teal.500"
-                                  />
-                                )}
-                                <Page {...pageProps} />
-                                <Center>{pageProps.pageNumber}</Center>
-                              </VStack>
-                            </Box>
-                          );
-                        })}
-                    </Flex>
-                  </Document>
+                                  </style>
+                                  {findPage(pageProps.pageNumber) && (
+                                    <CheckCircleIcon
+                                      top={2}
+                                      left={2}
+                                      boxSize={6}
+                                      color="teal.500"
+                                    />
+                                  )}
+                                  <Page {...pageProps} />
+                                  <Center>{pageProps.pageNumber}</Center>
+                                </VStack>
+                              </Box>
+                            );
+                          })}
+                      </Flex>
+                    </Document>
+                  </Flex>
                   <SideDrawer
                     pages={pages}
                     setPages={setPages}
@@ -216,10 +222,11 @@ const PdfFile = () => {
                 flexDir={"column"}
                 alignItems={"center"}
                 justifyContent={"center"}
+                mt={20}
               >
                 <Heading mt={5} mb={3}>
                   {" "}
-                  PDF has been split
+                  Your PDF is ready
                 </Heading>{" "}
                 <Button
                   leftIcon={<DownloadIcon boxSize={6} />}
