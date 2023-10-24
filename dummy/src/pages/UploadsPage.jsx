@@ -17,16 +17,26 @@ import {
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 const UploadsPage = () => {
+  // Access authentication context
   const { loading, setLoading, currentUser } = useAuth();
+
+  // State for storing uploaded files
   const [uploads, setUploads] = useState([]);
+
+  // Toast for displaying error messages
   const toast = useToast();
+
+  // Fetch uploads when the component mounts
   useEffect(() => {
     const fetchUploads = async () => {
       try {
         setLoading(true);
+        // Include the user's token in the request headers
         const config = {
           headers: { authorization: `Bearer ${currentUser.token}` },
         };
+
+        // Fetch user's uploads
         const { data } = await axios.get(
           `${import.meta.env.VITE_REACT_API_URL}/upload/myuploads`,
           config
@@ -34,6 +44,7 @@ const UploadsPage = () => {
         setUploads(data);
       } catch (error) {
         console.log(error);
+        // Display an error toast
         toast({
           title: "Error",
           description: error.message,
@@ -46,6 +57,8 @@ const UploadsPage = () => {
     };
     fetchUploads();
   }, []);
+
+  // Function to handle file download
   const handleDownload = (data) => {
     const a = document.createElement("a");
     a.style.display = "none";
@@ -55,6 +68,8 @@ const UploadsPage = () => {
     a.click();
     document.body.removeChild("a");
   };
+
+  // Function to open PDF in a new tab
   const handleOpenPdf = (data) => {
     window.open(data.fileUrl, "_blank");
   };

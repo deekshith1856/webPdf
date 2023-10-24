@@ -1,11 +1,9 @@
-"use client";
-
 import { Container, Stack, Flex, Box, Heading, Text } from "@chakra-ui/react";
 import LayoutContainer from "../../components/Layout/Layout";
 
 import LoginForm from "../../components/auth/LoginForm";
 import { useAuth } from "../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

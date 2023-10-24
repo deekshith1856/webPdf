@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define a schema for your files
 const fileSchema = new mongoose.Schema({
     fileName: {
         type: String,
@@ -11,11 +12,12 @@ const fileSchema = new mongoose.Schema({
     },
     userId: {
         type: mongoose.Schema.ObjectId,
-        ref: 'User',
+        ref: 'User',  // Reference to the User model
         required: true
     }
 
 }, { timestamps: true })
 
+// Create a model based on the schema
 const FileModel = mongoose.model('FileModel', fileSchema);
 export default FileModel;

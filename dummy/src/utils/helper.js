@@ -11,6 +11,7 @@ function formatPageNumbers(pageNumbers) {
         } else if (pageNumbers[i] === end + 1) {
             end = pageNumbers[i];
         } else {
+            // If a range of consecutive page numbers ends, push the range to the formatted numbers
             if (start === end) {
                 formattedNumbers.push(start.toString());
             } else {
@@ -21,6 +22,7 @@ function formatPageNumbers(pageNumbers) {
         }
     }
 
+    // Push the last range or single page number if present
     if (start !== null) {
         if (start === end) {
             formattedNumbers.push(start.toString());
@@ -29,6 +31,7 @@ function formatPageNumbers(pageNumbers) {
         }
     }
 
+    // Join the formatted numbers with a comma and space
     return formattedNumbers.join(', ');
 }
 

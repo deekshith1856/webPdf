@@ -30,6 +30,7 @@ function PageNotFound() {
             position={"relative"}
           >
             <Link to="/">
+              {/* Button to navigate back to the home page */}
               <Button
                 colorScheme={"green"}
                 bg={"green.400"}

@@ -17,6 +17,8 @@ import {
 import { CheckCircleIcon, DownloadIcon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDraw/SideDrawer";
 import LoadingSpinner from "./Spinner/LoadingSpinner";
+import SelectPdf from "./miscellaneous/SelectPdf";
+import DownloadSplit from "./miscellaneous/DownloadSplit";
 
 const PdfFile = () => {
   const [selectedFile, setSelectedFile] = useState();
@@ -94,47 +96,7 @@ const PdfFile = () => {
           {!pdfUrl ? (
             <Flex direction="row" justify={"space-between"}>
               {!selectedFile ? (
-                <Container mt={20}>
-                  <Box
-                    display="flex"
-                    width={"100%"}
-                    flexDir={"column"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                  >
-                    <Heading mt={5} mb={3}>
-                      {" "}
-                      Split pdf
-                    </Heading>{" "}
-                    <Spacer />
-                    <Text textAlign={"center"} mb={5}>
-                      Separate one page or a whole set for easy conversion into
-                      independent PDF files.
-                    </Text>
-                    <Spacer />
-                    <Center>
-                      <FormControl id="fileInput">
-                        <Input
-                          type="file"
-                          accept=".pdf"
-                          onChange={handleChange}
-                          display="none" // Hide the default input field
-                        />
-                        <Button
-                          as="label"
-                          htmlFor="fileInput"
-                          colorScheme="teal"
-                          width={40}
-                          size={"lg"}
-                          px={3}
-                          py={3}
-                        >
-                          Select PDF file
-                        </Button>
-                      </FormControl>
-                    </Center>
-                  </Box>
-                </Container>
+                <SelectPdf handleChange={handleChange} />
               ) : (
                 <>
                   <Flex
@@ -215,31 +177,7 @@ const PdfFile = () => {
               )}
             </Flex>
           ) : (
-            <>
-              <Box
-                display="flex"
-                width={"100%"}
-                flexDir={"column"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                mt={20}
-              >
-                <Heading mt={5} mb={3}>
-                  {" "}
-                  Your PDF is ready
-                </Heading>{" "}
-                <Button
-                  leftIcon={<DownloadIcon boxSize={6} />}
-                  colorScheme="teal"
-                  width={"30%"}
-                  px={3}
-                  mt={5}
-                  onClick={handleDownloadPdf}
-                >
-                  Download split PDF
-                </Button>
-              </Box>
-            </>
+            <DownloadSplit handleDownloadPdf={handleDownloadPdf} />
           )}
         </>
       )}
