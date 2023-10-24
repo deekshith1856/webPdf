@@ -6,20 +6,6 @@ import verifyToken from "../middlewares/verifyToken.js";
 // Create an Express Router
 const router = express.Router();
 
-// Define a multer instance for file splitting
-const split = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            // Specify the directory where you want to save the files ('./upload' directory)
-            cb(null, '../api/upload');
-        },
-        filename: (req, file, cb) => {
-            // Define the filename for the uploaded file (e.g., use the original name)
-            cb(null, Date.now() + file.originalname);
-        },
-    })
-});
-
 // Define a multer instance for temporary in-memory file storage
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -27,7 +13,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.get('/myuploads', verifyToken, getUploads);
 
 // Route to split a PDF file (uses the 'split' multer middleware)
-router.post('/split', split.single('file'), splitPdf);
+router.post('/split', upload.single('file'), splitPdf);
 
 // Route to upload multiple PDF files to the cloud (requires token verification)
 router.post('/cloud', verifyToken, upload.array('pdfFiles', 5), uploadPdf);

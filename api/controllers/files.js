@@ -1,4 +1,3 @@
-import fs from 'fs'
 import { PDFDocument } from 'pdf-lib';
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { initializeApp } from "firebase/app";
@@ -9,16 +8,15 @@ import FileModel from '../models/files.js';
 const splitPdf = async (req, res, next) => {
     try {
         //Access the uploaded file as buffer
-        const uploadedFile = req.file;
+        const uploadedFileBuffer = req.file.buffer;
 
         const pages = req.body.pages;
         if (uploadedFile) {
             //file saved successfully
-            const pdfBytes = fs.readFileSync(uploadedFile.path)
 
             //create new pdf document
             const pdfDoc = await PDFDocument.create();
-            const pdfDoc2 = await PDFDocument.load(pdfBytes);
+            const pdfDoc2 = await PDFDocument.load(uploadedFileBuffer);
 
             const copiedPages = await pdfDoc.copyPages(pdfDoc2, pages.length > 1 ? pages.map(pageNumber => pageNumber - 1) : [pages[0] - 1])
 
@@ -33,14 +31,6 @@ const splitPdf = async (req, res, next) => {
             res.setHeader('Content-Disposition', 'attachment; filename="new.pdf"');
             res.send(newPdfBytes);
 
-
-            fs.unlink(`./upload/${uploadedFile.filename}`, (err) => {
-                if (err) {
-                    console.error("Error deleting file:", err);
-                } else {
-                    console.log("File deleted successfully.");
-                }
-            });
         }
         else {
             // File not saved

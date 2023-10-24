@@ -37,7 +37,7 @@ const PdfFile = () => {
     try {
       // Send a POST request to split the PDF
       const { data } = await axios.post(
-        `${import.meta.env.VITE_REACT_API_URL}/upload/split`,
+        `http://localhost:5000/api/upload/split`,
         formData
       );
 
