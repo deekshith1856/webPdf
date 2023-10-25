@@ -70,7 +70,7 @@ export default function Login() {
 
               <Text color={"gray.500"}>
                 Access your PDFs from anywhere, on any device. Safe and reliable
-                cloud storage ensures your PDFs are always at your fingertips.
+                cloud storage ensures your PDFs are always at your fingertip.
               </Text>
             </Box>
           </Stack>
