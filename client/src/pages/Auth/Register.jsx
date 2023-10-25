@@ -42,18 +42,34 @@ export default function Register() {
                   zIndex: -1,
                 }}
               >
-                Write once,
+                Welcome to Split PDF -
               </Text>
               <br />
               <Text as={"span"} color={"red.400"}>
-                use everywhere!
+                Your PDF Management Solution
               </Text>
             </Heading>
-            <Text color={"gray.500"}>
-              Snippy is a rich coding snippets app that lets you create your own
-              code snippets, categorize them, and even sync them in the cloud so
-              you can use them anywhere. All that is free!
-            </Text>
+
+            <Box>
+              <Text fontSize={"xl"} fontWeight={"semibold"}>
+                Register to use our exclusive features
+              </Text>
+              <br />
+              <Text color={"gray.700"}>Store PDFs Securely in the Cloud </Text>
+              <Text color={"gray.500"}>
+                Access your PDFs from anywhere, on any device. Safe and reliable
+                cloud storage ensures your PDFs are always at your fingertips.{" "}
+              </Text>
+            </Box>
+
+            <Box>
+              <Text color={"gray.700"}>Effortlessly Split PDFs</Text>
+
+              <Text color={"gray.500"}>
+                Access your PDFs from anywhere, on any device. Safe and reliable
+                cloud storage ensures your PDFs are always at your fingertips.
+              </Text>
+            </Box>
           </Stack>
           <Flex
             flex={1}
