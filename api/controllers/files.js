@@ -98,13 +98,21 @@ const uploadPdf = (req, res, next) => {
 }
 const getUploads = async (req, res, next) => {
     try {
+        console.log(req.query);
+        const sortBy = req.query.sortBy || 1;
+        const currentPage = req.query.currentPage || 1;
+        const dataPerPage = req.query.dataPerPage || 10;
+
+
         const data = await FileModel.find({ userId: req.user._id })
+            .sort({ createdAt: sortBy }).skip((currentPage - 1) * dataPerPage).limit(dataPerPage)
+        const dataCount = await FileModel.countDocuments({ userId: req.user._id })
 
         if (!data) {
             res.status(200).send({ message: 'No data' })
         }
         else {
-            res.status(200).send(data);
+            res.status(200).send({ data, dataCount: Math.floor(dataCount / dataPerPage) });
         }
 
     } catch (error) {

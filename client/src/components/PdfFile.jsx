@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import axios from "axios";
-import { Box, Center, Flex, VStack } from "@chakra-ui/react";
+import { Box, Center, Flex, VStack, useToast } from "@chakra-ui/react";
 import { CheckCircleIcon, DownloadIcon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDraw/SideDrawer";
 import LoadingSpinner from "./Spinner/LoadingSpinner";
 import SelectPdf from "./miscellaneous/SelectPdf";
 import DownloadSplit from "./miscellaneous/DownloadSplit";
+import { useAuth } from "../context/AuthContext";
 
 const PdfFile = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [numPages, setNumPages] = useState(0);
   const [pages, setPages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useAuth();
   const [pdfUrl, setPdfUrl] = useState("");
-
+  const toast = useToast();
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
   // Function to handle successful loading of PDF
@@ -72,6 +73,13 @@ const PdfFile = () => {
   // Function to handle the selection of PDF file
   const handleChange = (e) => {
     setSelectedFile(e.target.files[0]);
+    toast({
+      title: "Select pages.",
+      description: "Click on the pages to select ",
+      colorScheme: "teal",
+      position: "top",
+      isClosable: true,
+    });
   };
 
   // Function to handle the selection of specific pages

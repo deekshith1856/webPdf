@@ -101,7 +101,6 @@ export default function Header() {
                     <Link to={"/dashboard/myuploads"}>
                       <MenuItem>My files</MenuItem>
                     </Link>
-                    <MenuItem>Profile</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </MenuList>
                 </Menu>

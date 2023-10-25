@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import LayoutContainer from "../components/Layout/Layout";
-import { Center, useToast } from "@chakra-ui/react";
+import { Box, Center, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import LoadingSpinner from "../components/Spinner/LoadingSpinner";
 import {
@@ -16,13 +16,18 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
+import UploadsBar from "../components/miscellaneous/UploadsBar";
+import UploadsPagination from "../components/miscellaneous/UploadsPagination";
 const UploadsPage = () => {
   // Access authentication context
   const { loading, setLoading, currentUser } = useAuth();
 
   // State for storing uploaded files
   const [uploads, setUploads] = useState([]);
-
+  // filters for docs
+  const [sortBy, setSortBy] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
   // Toast for displaying error messages
   const toast = useToast();
 
@@ -31,6 +36,18 @@ const UploadsPage = () => {
     const fetchUploads = async () => {
       try {
         setLoading(true);
+
+        // Define the data you want to send as query parameters
+        const queryParams = {
+          currentPage: currentPage,
+          dataPerPage: 10,
+          sortBy: sortBy,
+        };
+        // Convert the queryParams object into a query string
+        const queryString = Object.keys(queryParams)
+          .map((key) => `${key}=${encodeURIComponent(queryParams[key])}`)
+          .join("&");
+
         // Include the user's token in the request headers
         const config = {
           headers: { authorization: `Bearer ${currentUser.token}` },
@@ -38,10 +55,13 @@ const UploadsPage = () => {
 
         // Fetch user's uploads
         const { data } = await axios.get(
-          `${import.meta.env.VITE_REACT_API_URL}/upload/myuploads`,
+          `${
+            import.meta.env.VITE_REACT_API_URL
+          }/upload/myuploads?${queryString}`,
           config
         );
-        setUploads(data);
+        setUploads(data.data);
+        setTotalPages(data.dataCount);
       } catch (error) {
         console.log(error);
         // Display an error toast
@@ -56,15 +76,15 @@ const UploadsPage = () => {
       }
     };
     fetchUploads();
-  }, []);
+  }, [currentPage, sortBy]);
 
   // Function to handle file download
   const handleDownload = (data) => {
     const a = document.createElement("a");
-    a.style.display = "none";
-    document.body.appendChild(a);
+
     a.href = data.fileUrl;
     a.download = data.fileName;
+    document.body.appendChild(a);
     a.click();
     document.body.removeChild("a");
   };
@@ -78,8 +98,9 @@ const UploadsPage = () => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <>
-          <Center mt={20}>
+        <Box mt={20}>
+          <UploadsBar sortBy={sortBy} setSortBY={setSortBy} />
+          <Center>
             <TableContainer w={{ base: "100%", md: "5xl" }}>
               <Table variant="striped" colorScheme="teal">
                 <TableCaption>My files</TableCaption>
@@ -91,28 +112,34 @@ const UploadsPage = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {uploads.map((data, index) => (
-                    <Tr key={index}>
-                      <Td isNumeric>{index + 1}</Td>
-                      <Td
-                        _hover={{ cursor: "pointer" }}
-                        onClick={() => handleOpenPdf(data)}
-                      >
-                        {data.fileName}
-                      </Td>
-                      <Td
-                        _hover={{ cursor: "pointer" }}
-                        onClick={() => handleDownload(data)}
-                      >
-                        <DownloadIcon />
-                      </Td>
-                    </Tr>
-                  ))}
+                  {uploads.length > 0 &&
+                    uploads.map((data, index) => (
+                      <Tr key={index}>
+                        <Td isNumeric>{index + 1}</Td>
+                        <Td
+                          _hover={{ cursor: "pointer" }}
+                          onClick={() => handleOpenPdf(data)}
+                        >
+                          {data.fileName}
+                        </Td>
+                        <Td
+                          _hover={{ cursor: "pointer" }}
+                          onClick={() => handleDownload(data)}
+                        >
+                          <DownloadIcon />
+                        </Td>
+                      </Tr>
+                    ))}
                 </Tbody>
               </Table>
             </TableContainer>
           </Center>
-        </>
+          <UploadsPagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
+        </Box>
       )}
     </LayoutContainer>
   );
