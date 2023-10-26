@@ -2,8 +2,9 @@ import { Center, Spinner } from "@chakra-ui/react";
 import React from "react";
 
 const LoadingSpinner = () => {
+
   return (
-    <Center>
+    <Center mt={40}>
       <Spinner
         thickness="4px"
         speed="0.65s"

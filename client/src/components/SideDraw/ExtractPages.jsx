@@ -4,6 +4,9 @@ import { formatPageNumbers } from "../../utils/helper";
 
 const ExtractPages = ({ pages, handleSubmit }) => {
   const [formatedPageNumbers, setFormatedPageNumbers] = useState();
+
+  // Use useEffect to format the page numbers when 'pages' prop changes
+
   useEffect(() => {
     const data = formatPageNumbers(pages);
     setFormatedPageNumbers(data);

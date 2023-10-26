@@ -9,7 +9,8 @@ const generateToken = (_id) => {
     } catch (error) {
         // Handle any errors that occur during token generation
         console.log(error);
-        throw new Error('Error in generating token');
+        next(error)
+
     }
 };
 

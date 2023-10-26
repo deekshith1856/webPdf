@@ -1,11 +1,10 @@
+import React from "react";
 import {
-  Flex,
   Box,
   FormControl,
   FormLabel,
   Input,
   InputGroup,
-  HStack,
   InputRightElement,
   Stack,
   Button,
@@ -13,33 +12,48 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useAuth } from "../../context/AuthContext";
+
 const LoginForm = () => {
+  // State for controlling password visibility and form data
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [validationError, setValidationError] = useState({});
+  // Get the handleLogin function from the authentication context
   const { handleLogin } = useAuth();
+
+  // Create a toast for displaying notifications
   const toast = useToast();
+
+  // Handle form submission
   const handleSubmit = () => {
-    try {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Validate form fields
+    if (!email || !password) {
+      setValidationError({
+        email: { message: "Required email" },
+        password: { message: "Required password" },
+      });
+
+      return toast({
+        title: "Warning",
+        status: "warning",
+        isClosable: true,
+        description: "All fields required",
+        duration: 3000,
+      });
+    } else {
       setLoading(true);
-      if (!email || !password) {
-        toast({
-          title: "Warning",
-          type: "warning",
-          isClosable: true,
-          description: "All fields required",
-          duration: 3000,
-        });
-      }
+      // Call the handleLogin function from the authentication context
       handleLogin({ email, password });
-    } catch (error) {
-    } finally {
       setLoading(false);
     }
   };
@@ -58,15 +72,29 @@ const LoginForm = () => {
         p={7}
       >
         <Stack spacing={4}>
-          <FormControl id="email" isRequired>
+          <FormControl
+            id="email"
+            isRequired
+            isInvalid={validationError?.email ? true : false}
+          >
             <FormLabel>Email address</FormLabel>
             <Input
               type="email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
+
+            {validationError.email && (
+              <FormErrorMessage>
+                {validationError.email.message}
+              </FormErrorMessage>
+            )}
           </FormControl>
-          <FormControl id="password" isRequired>
+          <FormControl
+            id="password"
+            isRequired
+            isInvalid={validationError?.password ? true : false}
+          >
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <Input
@@ -85,6 +113,11 @@ const LoginForm = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
+            {validationError.password && (
+              <FormErrorMessage>
+                {validationError.password.message}
+              </FormErrorMessage>
+            )}
           </FormControl>
           <Stack spacing={10} pt={2}>
             <Button

@@ -1,3 +1,5 @@
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -16,10 +18,11 @@ import {
 } from "@chakra-ui/react";
 import { useAuth } from "../../context/AuthContext";
 import { FaUserCircle, FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 export default function Header() {
+  // Get user authentication information from the context
   const { loggedIn, currentUser, handleLogout } = useAuth();
+
   return (
     <>
       <Box
@@ -33,11 +36,13 @@ export default function Header() {
       >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Box mx={{ base: "2", md: "5" }} fontWeight={"bold"}>
+            {/* Display the app name and link to the home page */}
             <Link to={"/"}>Split PDF</Link>
           </Box>
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
+              {/* Render buttons for non-logged-in users */}
               {!loggedIn ? (
                 <ButtonGroup>
                   <Link to={"/auth/login"}>
@@ -54,12 +59,12 @@ export default function Header() {
                       <Text display={{ base: "none", md: "inline-block" }}>
                         Register
                       </Text>
-
                       <FaUserCircle />
                     </Button>
                   </Link>
                 </ButtonGroup>
               ) : (
+                // Render a menu for logged-in users
                 <Menu>
                   <Link to={"/dashboard/uploads"}>
                     <Button
@@ -77,6 +82,7 @@ export default function Header() {
                     cursor={"pointer"}
                     minW={0}
                   >
+                    {/* Display the user's avatar */}
                     <Avatar
                       size={"sm"}
                       src={"https://avatars.dicebear.com/api/male/username.svg"}
@@ -94,6 +100,7 @@ export default function Header() {
                     </Center>
                     <br />
                     <Center>
+                      {/* Display the user's name */}
                       <p>{currentUser.name}</p>
                     </Center>
                     <br />

@@ -93,13 +93,17 @@ const UploadsPage = () => {
   const handleOpenPdf = (data) => {
     window.open(data.fileUrl, "_blank");
   };
+  const handleSetSortBy = (val) => {
+    setSortBy(val);
+    setCurrentPage(1);
+  };
   return (
     <LayoutContainer>
       {loading ? (
         <LoadingSpinner />
       ) : (
         <Box mt={20}>
-          <UploadsBar sortBy={sortBy} setSortBY={setSortBy} />
+          <UploadsBar sortBy={sortBy} setSortBy={handleSetSortBy} />
           <Center>
             <TableContainer w={{ base: "100%", md: "5xl" }}>
               <Table variant="striped" colorScheme="teal">
@@ -115,7 +119,7 @@ const UploadsPage = () => {
                   {uploads.length > 0 &&
                     uploads.map((data, index) => (
                       <Tr key={index}>
-                        <Td isNumeric>{index + 1}</Td>
+                        <Td isNumeric>{(currentPage - 1) * 10 + index + 1}</Td>
                         <Td
                           _hover={{ cursor: "pointer" }}
                           onClick={() => handleOpenPdf(data)}

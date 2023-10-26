@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import axios from "axios";
-import { Box, Center, Flex, VStack, useToast } from "@chakra-ui/react";
-import { CheckCircleIcon, DownloadIcon } from "@chakra-ui/icons";
+import { Box, Button, Center, Flex, VStack, useToast } from "@chakra-ui/react";
+import { CheckCircleIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import SideDrawer from "./SideDraw/SideDrawer";
 import LoadingSpinner from "./Spinner/LoadingSpinner";
-import SelectPdf from "./miscellaneous/SelectPdf";
+
 import DownloadSplit from "./miscellaneous/DownloadSplit";
 import { useAuth } from "../context/AuthContext";
+import SelectPdf from "./miscellaneous/SelectPdf";
+import ArrowBackModel from "./miscellaneous/ArrowBackModel";
 
 const PdfFile = () => {
   const [selectedFile, setSelectedFile] = useState();
@@ -15,6 +17,11 @@ const PdfFile = () => {
   const [pages, setPages] = useState([]);
   const { loading, setLoading } = useAuth();
   const [pdfUrl, setPdfUrl] = useState("");
+
+  const [modalState, setModalState] = useState(false);
+  const closeModal = () => {
+    setModalState(false);
+  };
   const toast = useToast();
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -96,6 +103,11 @@ const PdfFile = () => {
   const findPage = (val) => {
     return pages.includes(val);
   };
+  //Function to handle go back to select pdf
+  const handleArrowBack = () => {
+    setSelectedFile();
+    setPdfUrl("");
+  };
   return (
     <div>
       {loading ? (
@@ -105,9 +117,28 @@ const PdfFile = () => {
           {!pdfUrl ? (
             <Flex direction="row" justify={"space-between"}>
               {!selectedFile ? (
+                // <Hero handleChange={handleChange} />
                 <SelectPdf handleChange={handleChange} />
               ) : (
                 <>
+                  <Button
+                    position={"fixed"}
+                    zIndex={100}
+                    mt={20}
+                    ml={5}
+                    rounded={"full"}
+                    backgroundColor={"red"}
+                    color={"white"}
+                    onClick={() => setModalState(true)}
+                    _hover={{ color: "black" }}
+                  >
+                    <ArrowBackIcon />
+                  </Button>
+                  <ArrowBackModel
+                    isOpen={modalState}
+                    onClose={closeModal}
+                    handleArrowBack={handleArrowBack}
+                  />
                   <Flex
                     height={"100%"}
                     width={{ base: "100%", md: "75%" }}
@@ -186,7 +217,10 @@ const PdfFile = () => {
               )}
             </Flex>
           ) : (
-            <DownloadSplit handleDownloadPdf={handleDownloadPdf} />
+            <DownloadSplit
+              handleDownloadPdf={handleDownloadPdf}
+              handleArrowBack={handleArrowBack}
+            />
           )}
         </>
       )}
@@ -195,3 +229,4 @@ const PdfFile = () => {
 };
 
 export default PdfFile;
+

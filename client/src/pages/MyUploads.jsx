@@ -13,7 +13,16 @@ const MyUploads = () => {
 
   const handleChange = (e) => {
     const filesArray = Array.from(e.target.files);
-    console.log(filesArray);
+    if (filesArray.length > 5) {
+      return toast({
+        title: "Max files per upload 5",
+        description: "Exceded max file limit per upload ",
+        status: "warning",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+    }
     setSelectedFiles(filesArray);
   };
   const navigate = useNavigate();
@@ -36,7 +45,15 @@ const MyUploads = () => {
         formData,
         config
       );
-      console.log(data);
+      //toast to display success message
+      toast({
+        title: "Files uploaded successfully",
+        description: "Files have been uploaded successfully",
+        position: "top",
+        duration: 4000,
+        status: "success",
+        isClosable: true,
+      });
     } catch (error) {
       console.log(error);
       toast({
@@ -49,6 +66,8 @@ const MyUploads = () => {
       setLoading(false);
     }
   };
+
+  //Removing file from array of selected files
   const handleRemove = (indexToRemove) => {
     const updatedFiles = selectedFiles.filter(
       (_, index) => index != indexToRemove

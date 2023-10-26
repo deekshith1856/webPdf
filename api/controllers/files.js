@@ -34,16 +34,30 @@ const splitPdf = async (req, res, next) => {
         }
         else {
             // File not saved
-            res.status(500).send('File upload failed')
+            const error = new Error('Failed to process the files')
+
+            error.status = 401; // Set the status code for the error
+
+            throw error;
+
+
         }
     } catch (error) {
         console.log(error)
-        res.status(500).send(error.message)
+        next(error);
     }
 }
 const uploadPdf = (req, res, next) => {
     try {
+        //if no files are sent to server
+        if (req.files.length < 1) {
+            const error = new Error('No files present')
 
+            error.status = 401; // Set the status code for the error
+
+            throw error;
+
+        }
         //Initialize a firebase application
         initializeApp(config.firebaseConfig);
         // Initialize Cloud Storage and get a reference to the service
@@ -76,29 +90,34 @@ const uploadPdf = (req, res, next) => {
 
         })
         Promise.all(promises).then((results) => {
-
+            // Handle the results of the promises returned by FileModel.create()
             results.map(async (result) => {
+                // Create a new document in the FileModel collection for each result
                 await FileModel.create({
                     fileName: result.name,
                     fileUrl: result.downloadURL,
                     userId: req.user._id
                 })
             })
-            console.log('Files successfully uploaded.');
+            // Send a response after all FileModel.create() promises have resolved
             res.send({
                 message: 'Files uploaded to Firebase Storage',
 
             });
 
-        }).catch((error) => { res.status(400).send(error.message) })
+        }).catch((error) => {
+            console.log(error);
+            next(error)
+        })
     } catch (error) {
+
         console.log(error)
-        res.status(500).send(error.message)
+        // Handle any errors that occur in the Promise.all() or FileModel.create() process
+        next(error);
     }
 }
 const getUploads = async (req, res, next) => {
     try {
-        console.log(req.query);
         const sortBy = req.query.sortBy || 1;
         const currentPage = req.query.currentPage || 1;
         const dataPerPage = req.query.dataPerPage || 10;
@@ -109,7 +128,11 @@ const getUploads = async (req, res, next) => {
         const dataCount = await FileModel.countDocuments({ userId: req.user._id })
 
         if (!data) {
-            res.status(200).send({ message: 'No data' })
+            const error = new Error('data not avaiable')
+
+            error.status = 401; // Set the status code for the error
+
+            throw error;
         }
         else {
             res.status(200).send({ data, dataCount: Math.floor(dataCount / dataPerPage) });
@@ -117,9 +140,12 @@ const getUploads = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).send({ error: error.message })
+        next(error);
     }
 }
+
+
+
 const giveCurrentDateTime = () => {
     const today = new Date();
     const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();

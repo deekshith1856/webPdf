@@ -1,31 +1,51 @@
-import { Box, Button, Heading } from "@chakra-ui/react";
+import { Box, Button, HStack, Heading, Text, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import { DownloadIcon } from "@chakra-ui/icons";
-const DownloadSplit = ({ handleDownloadPdf }) => {
+import { ArrowBackIcon, DownloadIcon } from "@chakra-ui/icons";
+const DownloadSplit = ({ handleDownloadPdf, handleArrowBack }) => {
   return (
-    <Box
-      display="flex"
-      width={"100%"}
-      flexDir={"column"}
-      alignItems={"center"}
-      justifyContent={"center"}
-      mt={20}
-    >
-      <Heading mt={5} mb={3}>
-        {" "}
-        Your PDF is ready
-      </Heading>{" "}
-      <Button
-        leftIcon={<DownloadIcon boxSize={6} />}
-        colorScheme="teal"
-        width={"30%"}
-        px={3}
-        mt={5}
-        onClick={handleDownloadPdf}
+    <>
+      <Tooltip hasArrow label="Go to split pdf">
+        <Button
+          position={"fixed"}
+          colorScheme="red"
+          ml={5}
+          onClick={handleArrowBack}
+        >
+          <ArrowBackIcon />
+        </Button>
+      </Tooltip>
+      <Box
+        display="flex"
+        width={"100%"}
+        flexDir={"column"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        mt={20}
       >
-        Download split PDF
-      </Button>
-    </Box>
+        <Heading mt={5} mb={3}>
+          {" "}
+          Your PDF is ready
+        </Heading>{" "}
+        <Button
+          leftIcon={<DownloadIcon boxSize={6} />}
+          colorScheme="teal"
+          display={{ base: "none", md: "block" }}
+          width={"30%"}
+          px={3}
+          mt={5}
+          onClick={handleDownloadPdf}
+        >
+          Download split PDF
+        </Button>{" "}
+        <Button
+          display={{ md: "none", base: "block" }}
+          onClick={handleDownloadPdf}
+          colorScheme="teal"
+        >
+          Download PDF
+        </Button>
+      </Box>
+    </>
   );
 };
 

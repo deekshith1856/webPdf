@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   FormControl,
@@ -12,6 +13,7 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -19,27 +21,55 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useAuth } from "../../context/AuthContext";
 
 export default function RegisterForm() {
+  // State for controlling password visibility and form data
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [validationError, setValidationError] = useState({});
+  // Get the handleRegister function from the authentication context
   const { handleRegister } = useAuth();
+
+  // Create a toast for displaying notifications
   const toast = useToast();
+
+  // Handle form submission
   const handleSubmit = () => {
-    setLoading(true);
+    // Validate form fields
     if (!name || !email || !password) {
-      toast({
+      setValidationError({
+        name: name.length > 0 ? null : { message: "Required name" },
+        email: email.length > 0 ? null : { message: "Required email" },
+        password: password.length > 0 ? null : { message: "Required password" },
+      });
+      return toast({
         title: "error",
-        type: "warning",
+        status: "warning",
         description: "Required to fill all fields",
         isClosable: true,
         duration: 4000,
       });
+    } else if (password.length < 8 || emailPattern.test(email)) {
+      const emailError = emailPattern.test(email)
+        ? null
+        : { message: "Enter a valid email" };
+
+      const passwordError =
+        password.length < 8 ? { message: "min password lenght 8" } : null;
+      setValidationError({
+        name: null,
+        email: emailError,
+        password: passwordError,
+      });
+    } else {
+      setLoading(true);
+      // Call the handleRegister function from the authentication context
+      handleRegister({ name, email, password });
+      setLoading(false);
     }
-    handleRegister({ name, email, password });
-    setLoading(false);
   };
+
   return (
     <Stack maxW={"6xl"}>
       <Stack align={"center"}>
@@ -56,25 +86,47 @@ export default function RegisterForm() {
         <Stack spacing={4}>
           <HStack>
             <Box w={"100%"}>
-              <FormControl id="name" isRequired>
+              <FormControl
+                id="name"
+                isRequired
+                isInvalid={validationError?.name ? true : false}
+              >
                 <FormLabel> Name</FormLabel>
                 <Input
                   type="text"
                   onChange={(e) => setName(e.target.value)}
                   value={name}
                 />
+                {validationError.name && (
+                  <FormErrorMessage>
+                    {validationError.name.message}
+                  </FormErrorMessage>
+                )}
               </FormControl>
             </Box>
           </HStack>
-          <FormControl id="email" isRequired>
+          <FormControl
+            id="email"
+            isRequired
+            isInvalid={validationError?.email ? true : false}
+          >
             <FormLabel>Email address</FormLabel>
             <Input
               type="email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-            />
+            />{" "}
+            {validationError.email && (
+              <FormErrorMessage>
+                {validationError.email.message}
+              </FormErrorMessage>
+            )}
           </FormControl>
-          <FormControl id="password" isRequired>
+          <FormControl
+            id="password"
+            isRequired
+            isInvalid={validationError?.password ? true : false}
+          >
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <Input
@@ -92,7 +144,12 @@ export default function RegisterForm() {
                   {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                 </Button>
               </InputRightElement>
-            </InputGroup>
+            </InputGroup>{" "}
+            {validationError.password && (
+              <FormErrorMessage>
+                {validationError.password.message}
+              </FormErrorMessage>
+            )}
           </FormControl>
           <Stack spacing={10} pt={2}>
             <Button

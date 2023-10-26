@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Box,
@@ -18,23 +16,8 @@ import {
   TabPanel,
   Center,
 } from "@chakra-ui/react";
-import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-} from "react-icons/fi";
 import { BsFilterSquareFill } from "react-icons/bs";
-import SplitByRange from "./SplitByRange";
 import ExtractPages from "./ExtractPages";
-const LinkItems = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
-];
 
 export default function SimpleSidebar({
   handleSubmit,

@@ -8,11 +8,14 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
-  Text,
+  Radio,
+  RadioGroup,
+  Stack,
 } from "@chakra-ui/react";
 import React from "react";
 
-const UploadsBar = ({ sortBy, setSortBY }) => {
+const UploadsBar = ({ sortBy, setSortBy }) => {
+  console.log(sortBy);
   return (
     <Center>
       <Box
@@ -24,20 +27,22 @@ const UploadsBar = ({ sortBy, setSortBY }) => {
         w={{ base: "100%", md: "5xl" }}
       >
         <Heading> My Files</Heading>
-        <Menu closeOnSelect={false}>
+
+        <Menu closeOnSelect={true}>
           <MenuButton as={Button} colorScheme="blue">
             Sort By
           </MenuButton>
-          <MenuList minWidth="240px">
-            <MenuOptionGroup
+          <MenuList w="260px">
+            <RadioGroup
+              pl={2}
               value={sortBy}
-              title="Order"
-              type="radio"
-              onChange={(value) => setSortBY(value)}
+              onChange={(val) => setSortBy(val)}
             >
-              <MenuItemOption value="1">Latest</MenuItemOption>
-              <MenuItemOption value="-1">Oldest</MenuItemOption>
-            </MenuOptionGroup>
+              <Stack direction="column">
+                <Radio value="1">Latest</Radio>
+                <Radio value="-1">Oldest</Radio>
+              </Stack>
+            </RadioGroup>
           </MenuList>
         </Menu>
       </Box>
