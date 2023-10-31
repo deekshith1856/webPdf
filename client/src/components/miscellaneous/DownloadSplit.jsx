@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Heading, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Heading, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { ArrowBackIcon, DownloadIcon } from "@chakra-ui/icons";
 const DownloadSplit = ({ handleDownloadPdf, handleArrowBack }) => {
@@ -27,15 +27,15 @@ const DownloadSplit = ({ handleDownloadPdf, handleArrowBack }) => {
           Your PDF is ready
         </Heading>{" "}
         <Button
-          leftIcon={<DownloadIcon boxSize={6} />}
           colorScheme="teal"
           display={{ base: "none", md: "block" }}
           width={"30%"}
+          alignContent={"center"}
           px={3}
           mt={5}
           onClick={handleDownloadPdf}
         >
-          Download split PDF
+          <DownloadIcon boxSize={6} /> Download split PDF
         </Button>{" "}
         <Button
           display={{ md: "none", base: "block" }}

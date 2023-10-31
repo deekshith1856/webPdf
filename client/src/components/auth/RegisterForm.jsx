@@ -37,6 +37,13 @@ export default function RegisterForm() {
   // Handle form submission
   const handleSubmit = () => {
     // Validate form fields
+    function validateEmail(email) {
+      // Regular expression pattern for a basic email address validation
+      var pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      // Use the RegExp test() method to check if the email matches the pattern
+      return pattern.test(email);
+    }
     if (!name || !email || !password) {
       setValidationError({
         name: name.length > 0 ? null : { message: "Required name" },
@@ -50,8 +57,8 @@ export default function RegisterForm() {
         isClosable: true,
         duration: 4000,
       });
-    } else if (password.length < 8 || emailPattern.test(email)) {
-      const emailError = emailPattern.test(email)
+    } else if (password.length < 8 || !validateEmail(email)) {
+      const emailError = !validateEmail(email)
         ? null
         : { message: "Enter a valid email" };
 

@@ -83,7 +83,6 @@ const toast= useToast()
         `${import.meta.env.VITE_REACT_API_URL}/auth/signup`,
         { name, email, password }
       );
-
       setCurrentUser(data);
       setLoggedIn(true);
 

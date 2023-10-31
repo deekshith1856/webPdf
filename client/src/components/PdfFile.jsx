@@ -52,6 +52,7 @@ const PdfFile = () => {
       // Process the split PDF data
       const byteValues = Object.values(data);
       const binaryData = new Uint8Array(byteValues);
+
       // Create a Blob object with the binary data, specifying the MIME type
       const blob = new Blob([binaryData], { type: "application/pdf" });
       // Create a URL for the Blob to make it accessible for download or rendering
